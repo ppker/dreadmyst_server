@@ -95,15 +95,24 @@ const char* getOpcodeName(uint16_t opcode)
         case Opcode::Server_MarkNpcsOnMap: return "Server_MarkNpcsOnMap";
 
         // Client -> Server
+        case Opcode::Client_Ping: return "Client_Ping";
         case Opcode::Client_Authenticate: return "Client_Authenticate";
         case Opcode::Client_CharacterList: return "Client_CharacterList";
         case Opcode::Client_CharCreate: return "Client_CharCreate";
         case Opcode::Client_DeleteCharacter: return "Client_DeleteCharacter";
         case Opcode::Client_EnterWorld: return "Client_EnterWorld";
-        case Opcode::Client_RequestMove: return "Client_RequestMove";
-        case Opcode::Client_RequestStop: return "Client_RequestStop";
         case Opcode::Client_CastSpell: return "Client_CastSpell";
         case Opcode::Client_CancelCast: return "Client_CancelCast";
+        case Opcode::Client_CancelBuff: return "Client_CancelBuff";
+        case Opcode::Client_ChatMsg: return "Client_ChatMsg";
+        case Opcode::Client_ClickedGossipOption: return "Client_ClickedGossipOption";
+        case Opcode::Client_AcceptQuest: return "Client_AcceptQuest";
+        case Opcode::Client_AbandonQuest: return "Client_AbandonQuest";
+        case Opcode::Client_CompleteQuest: return "Client_CompleteQuest";
+        case Opcode::Client_RequestMove: return "Client_RequestMove";
+        case Opcode::Client_RequestStop: return "Client_RequestStop";
+        case Opcode::Client_ReqAbilityList: return "Client_ReqAbilityList";
+        case Opcode::Client_ReqTheoreticalSpell: return "Client_ReqTheoreticalSpell";
         case Opcode::Client_SetSelected: return "Client_SetSelected";
         case Opcode::Client_EquipItem: return "Client_EquipItem";
         case Opcode::Client_UnequipItem: return "Client_UnequipItem";
@@ -112,15 +121,16 @@ const char* getOpcodeName(uint16_t opcode)
         case Opcode::Client_DestroyItem: return "Client_DestroyItem";
         case Opcode::Client_UseItem: return "Client_UseItem";
         case Opcode::Client_SortInventory: return "Client_SortInventory";
-        case Opcode::Client_ReqAbilityList: return "Client_ReqAbilityList";
-        case Opcode::Client_OpenBank: return "Client_OpenBank";
+        case Opcode::Client_Action: return "Client_Action";
         case Opcode::Client_MoveInventoryToBank: return "Client_MoveInventoryToBank";
+        case Opcode::Client_OpenBank: return "Client_OpenBank";
         case Opcode::Client_MoveBankToBank: return "Client_MoveBankToBank";
         case Opcode::Client_UnBankItem: return "Client_UnBankItem";
         case Opcode::Client_SortBank: return "Client_SortBank";
         case Opcode::Client_BuyVendorItem: return "Client_BuyVendorItem";
         case Opcode::Client_SellItem: return "Client_SellItem";
         case Opcode::Client_Buyback: return "Client_Buyback";
+        case Opcode::Client_LootItem: return "Client_LootItem";
         case Opcode::Client_OpenTradeWith: return "Client_OpenTradeWith";
         case Opcode::Client_TradeAddItem: return "Client_TradeAddItem";
         case Opcode::Client_TradeRemoveItem: return "Client_TradeRemoveItem";
@@ -128,12 +138,6 @@ const char* getOpcodeName(uint16_t opcode)
         case Opcode::Client_TradeConfirm: return "Client_TradeConfirm";
         case Opcode::Client_TradeCancel: return "Client_TradeCancel";
         case Opcode::Client_Repair: return "Client_Repair";
-        case Opcode::Client_AcceptQuest: return "Client_AcceptQuest";
-        case Opcode::Client_CompleteQuest: return "Client_CompleteQuest";
-        case Opcode::Client_AbandonQuest: return "Client_AbandonQuest";
-        case Opcode::Client_ClickedGossipOption: return "Client_ClickedGossipOption";
-        case Opcode::Client_ChatMsg: return "Client_ChatMsg";
-        case Opcode::Client_SetIgnorePlayer: return "Client_SetIgnorePlayer";
         case Opcode::Client_GuildCreate: return "Client_GuildCreate";
         case Opcode::Client_GuildInviteMember: return "Client_GuildInviteMember";
         case Opcode::Client_GuildInviteResponse: return "Client_GuildInviteResponse";
@@ -163,6 +167,9 @@ const char* getOpcodeName(uint16_t opcode)
         case Opcode::Client_ReportPlayer: return "Client_ReportPlayer";
         case Opcode::Client_MOD: return "Client_MOD";
         case Opcode::Client_RecoverMailLoot: return "Client_RecoverMailLoot";
+        case Opcode::Client_SetToolbarSlot: return "Client_SetToolbarSlot";
+        case Opcode::Client_ChangeChannels: return "Client_ChangeChannels";
+        case Opcode::Client_SetIgnorePlayer: return "Client_SetIgnorePlayer";
 
         default: return "Unknown";
     }

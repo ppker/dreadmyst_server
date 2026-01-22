@@ -33,12 +33,21 @@ void handlePing(Session& session, StlBuffer& data)
 
 void registerMiscHandlers()
 {
-    // Ping is allowed in any connected state (Connected, Authenticated, InWorld)
+    // Client_Ping (0x01) - Primary ping from client, allowed in any connected state
     sPacketRouter.registerHandler(
-        Opcode::Mutual_Ping,
+        Opcode::Client_Ping,
         handlePing,
         SessionState::Connected,  // Required state
         true,                      // Allow higher states
+        "Client_Ping"
+    );
+
+    // Also handle Mutual_Ping (0x00) for backwards compatibility
+    sPacketRouter.registerHandler(
+        Opcode::Mutual_Ping,
+        handlePing,
+        SessionState::Connected,
+        true,
         "Mutual_Ping"
     );
 

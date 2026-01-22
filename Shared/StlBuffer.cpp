@@ -208,9 +208,10 @@ void StlBuffer::clear()
 
 StlBuffer& StlBuffer::build(StlBuffer&& buf)
 {
-    // Prepend size header (total packet size including header)
-    uint16_t packetSize = static_cast<uint16_t>(buf.size() + sizeof(uint16_t));
-    *this << packetSize;
+    // Prepend size header (4-byte length prefix, excludes the 4-byte header itself)
+    // Wire format: [4 bytes: payload size] [payload]
+    uint32_t payloadSize = static_cast<uint32_t>(buf.size());
+    *this << payloadSize;
     m_data.insert(m_data.end(), buf.m_data.begin(), buf.m_data.end());
     return *this;
 }

@@ -68,34 +68,38 @@ void SfSocket::receive(std::vector<std::unique_ptr<StlBuffer>>& output)
     }
 
     // Extract complete packets
-    while (m_recvBuffer.size() >= 4) {  // Minimum: 2 bytes size + 2 bytes opcode
-        // Peek at size
-        uint16_t packetSize = static_cast<uint16_t>(m_recvBuffer.data()[0]) |
-                              (static_cast<uint16_t>(m_recvBuffer.data()[1]) << 8);
+    // Wire format: [4 bytes: payload size (uint32 LE)] [2 bytes: opcode] [payload]
+    while (m_recvBuffer.size() >= 6) {  // Minimum: 4 bytes size + 2 bytes opcode
+        // Peek at payload size (4 bytes, little-endian)
+        uint32_t payloadSize = static_cast<uint32_t>(m_recvBuffer.data()[0]) |
+                               (static_cast<uint32_t>(m_recvBuffer.data()[1]) << 8) |
+                               (static_cast<uint32_t>(m_recvBuffer.data()[2]) << 16) |
+                               (static_cast<uint32_t>(m_recvBuffer.data()[3]) << 24);
 
-        // Validate packet size (must be at least 4 bytes: 2 size + 2 opcode)
-        if (packetSize < 4) {
+        // Validate payload size (must be at least 2 bytes for opcode)
+        if (payloadSize < 2) {
             // Invalid packet - discard byte and try again
             m_recvBuffer.eraseFront(1);
             continue;
         }
 
-        // Sanity check: don't allow packets > 64KB
-        if (packetSize > 65000) {
+        // Sanity check: don't allow packets > 1MB
+        if (payloadSize > 1000000) {
             // Likely garbage - disconnect
             disconnect();
             return;
         }
 
-        if (packetSize > m_recvBuffer.size())
+        // Check if we have the full packet (4-byte header + payload)
+        if (m_recvBuffer.size() < 4 + payloadSize)
             break;  // Incomplete packet
 
-        // Extract packet (skip size header)
+        // Extract packet payload (skip 4-byte size header)
         auto pkt = std::make_unique<StlBuffer>(
-            std::vector<uint8_t>(m_recvBuffer.data() + 2, m_recvBuffer.data() + packetSize));
+            std::vector<uint8_t>(m_recvBuffer.data() + 4, m_recvBuffer.data() + 4 + payloadSize));
         output.push_back(std::move(pkt));
 
-        m_recvBuffer.eraseFront(packetSize);
+        m_recvBuffer.eraseFront(4 + payloadSize);
     }
 }
 
